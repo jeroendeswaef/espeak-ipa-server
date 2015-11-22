@@ -283,10 +283,26 @@ answer_to_connection (void *cls, struct MHD_Connection *connection,
 int
 main (int argc, char* argv[])
 {
-  struct MHD_Daemon *daemon;
+  if (argc < 2) 
+  {
+    printf("Usage: %s port [espeak_data_parent_dir]\n", argv[0]);
+    return 1;
+  }
 
   int port = atoi(argv[1]);
-  int samplerate = espeak_Initialize(AUDIO_OUTPUT_SYNCHRONOUS,0,"/usr/share",0);
+
+  char* espeak_data_parent_dir;
+  if (argc >= 2) 
+  {
+    espeak_data_parent_dir = argv[2];
+  }
+  else
+  {
+    espeak_data_parent_dir = "/usr/share";
+  }
+  struct MHD_Daemon *daemon;
+
+  int samplerate = espeak_Initialize(AUDIO_OUTPUT_SYNCHRONOUS, 0, espeak_data_parent_dir, 0);
 
   daemon = MHD_start_daemon (MHD_USE_SELECT_INTERNALLY, port, NULL, NULL,
                              &answer_to_connection, NULL,
