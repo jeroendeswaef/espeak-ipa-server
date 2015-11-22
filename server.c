@@ -55,7 +55,7 @@ SynthCallback(short *wav, int numsamples, espeak_EVENT *events)
 }
 
 char*
-getIpa(char *in) 
+get_ipa(char *in, char *voicename) 
 {
   int option_phonemes = 3;
   int option_mbrola_phonemes = 0;
@@ -64,7 +64,11 @@ getIpa(char *in)
   FILE *f_phonemes_out = fmemopen(buf, MAXTEXTSIZE, "w");
     if (f_phonemes_out == NULL)
 	printf("ERROR f_phonemes_out is null\n");
- 
+
+  if(espeak_SetVoiceByName(voicename) != EE_OK)
+  {
+     fprintf(stderr,"Err loading voice '%s'\n", voicename); 
+  } 
   espeak_SetPhonemeTrace(option_phonemes | option_mbrola_phonemes,f_phonemes_out);
   espeak_SetSynthCallback(SynthCallback);
   int synth_flags = espeakCHARS_AUTO | espeakPHONEMES | espeakENDPAUSE;
@@ -182,7 +186,7 @@ iterate_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
     if (NULL != con_info->voicestring && NULL != con_info->textstring)
     {
        //printf("Got both: %s, %s\n", con_info->voicestring, con_info->textstring);
-       con_info->answerstring = getIpa(con_info->textstring);
+       con_info->answerstring = get_ipa(con_info->textstring, con_info->voicestring);
        
        return MHD_NO;
     }
