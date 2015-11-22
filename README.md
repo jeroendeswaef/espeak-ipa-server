@@ -14,4 +14,7 @@ Compile it by executing:
 
     ./espeak-ipa-server <port> <path_to_espeak_data>
     
+## Verification
+
+![Screenshot of PostMan sample POST request](https://raw.githubusercontent.com/jeroendeswaef/espeak-ipa-server/master/doc/postman.png)
     
