@@ -68,6 +68,7 @@ get_ipa(char *in, char *voicename)
   if(espeak_SetVoiceByName(voicename) != EE_OK)
   {
      fprintf(stderr,"Err loading voice '%s'\n", voicename); 
+     return NULL;
   } 
   espeak_SetPhonemeTrace(option_phonemes | option_mbrola_phonemes,f_phonemes_out);
   espeak_SetSynthCallback(SynthCallback);
